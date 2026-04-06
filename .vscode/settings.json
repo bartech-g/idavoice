@@ -11,5 +11,8 @@
     "typescript",
     "typescriptreact",
     "vue"
-  ]
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }
