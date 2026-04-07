@@ -12,17 +12,23 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/icon": "^2.2.1",
+    "@nuxtjs/color-mode": "^4.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "daisyui": "^5.5.19",
+    "drizzle-orm": "^0.45.2",
     "nuxt": "^4.4.2",
     "tailwindcss": "^4.2.2",
     "vue": "^3.5.31",
-    "vue-router": "^5.0.4"
+    "vue-router": "^5.0.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@iconify-json/tabler": "^1.2.33",
+    "@types/node": "^25.5.2",
+    "drizzle-kit": "^0.31.10",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0"
   },
