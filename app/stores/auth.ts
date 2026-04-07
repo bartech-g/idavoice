@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed } from 'vue'
-import { createAuthClient } from "better-auth/vue"
 
-const authClient = createAuthClient();
+import { authClient } from '~~/utils/auth-client'
 
 export const useAuthStore = defineStore('useAuthStore', () => {
     const session = authClient.useSession();
@@ -11,18 +10,17 @@ export const useAuthStore = defineStore('useAuthStore', () => {
 
     async function signUp(firstName: string, lastName: string, email: string, password: string) {
         await authClient.signUp.email({
-            name: `${firstName} ${lastName}`, // required
-            email: email, // required
-            password: password, // required
+            name: `${firstName} ${lastName}`,
+            email: email,
+            password: password,
             image: "",
-            callbackURL: "/dashboard",
+            callbackURL: "/",
         });
     }
+
     return {
-        //Computed
         loading,
         user,
-        //Actions
         signUp
     }
 })
