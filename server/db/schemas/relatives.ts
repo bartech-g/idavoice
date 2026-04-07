@@ -1,5 +1,5 @@
 import { integer, pgTable, text, } from "drizzle-orm/pg-core";
-
+import { user } from "./auth";
 
 export const relatives = pgTable("relatives", {
     id: integer().primaryKey(),
@@ -7,6 +7,7 @@ export const relatives = pgTable("relatives", {
     key: text().notNull(),
     relation: text().notNull(),
     desciption: text(),
+    userId: integer().notNull().references(() => user.id, { onDelete: "cascade" }),
     createdAt: integer().notNull().$default(() => Date.now()),
     updatedAt: integer().notNull().$default(() => Date.now()).$onUpdate(() => Date.now()),
 });

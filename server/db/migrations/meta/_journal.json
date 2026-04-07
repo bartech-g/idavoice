@@ -29,6 +29,20 @@
       "when": 1775576495440,
       "tag": "0003_wealthy_rocket_racer",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1775586391029,
+      "tag": "0004_complete_phil_sheldon",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1775587122213,
+      "tag": "0005_pale_clea",
+      "breakpoints": true
     }
   ]
 }
