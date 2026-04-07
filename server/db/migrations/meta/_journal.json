@@ -43,6 +43,13 @@
       "when": 1775587122213,
       "tag": "0005_pale_clea",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1775590347634,
+      "tag": "0006_gray_doctor_doom",
+      "breakpoints": true
     }
   ]
 }

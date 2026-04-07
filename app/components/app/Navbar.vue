@@ -19,8 +19,21 @@
       <NuxtLink to="/" class="btn btn-ghost text-xl">daisyUI</NuxtLink>
     </div>
     <div class="navbar-end">
-      <button class="btn btn-ghost mr-1">Bejelentkezés</button>
-      <Icon name="tabler:cloud-x" size="24" class="mx-4" />
+      <AuthButton />
+
+      <Icon
+        v-if="isLoggedIn"
+        name="tabler:cloud-check"
+        size="24"
+        class="mx-4"
+      />
+      <Icon v-else name="tabler:cloud-x" size="24" class="mx-4" />
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
+const isLoggedIn = computed(() => authStore.user !== undefined);
+</script>

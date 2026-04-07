@@ -7,7 +7,7 @@ export const relatives = pgTable("relatives", {
     key: text().notNull(),
     relation: text().notNull(),
     desciption: text(),
-    userId: integer().notNull().references(() => user.id, { onDelete: "cascade" }),
+    userId: text().notNull().references(() => user.id, { onDelete: "cascade" }),
     createdAt: integer().notNull().$default(() => Date.now()),
     updatedAt: integer().notNull().$default(() => Date.now()).$onUpdate(() => Date.now()),
 });
