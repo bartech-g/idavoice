@@ -37,9 +37,10 @@
               <span class="label-text">Description</span>
               <span class="label-text-alt text-base-content/50">Optional</span>
             </label>
-            <textarea
+            <input
               id="description"
               v-model="form.description"
+              type="textarea"
               placeholder="A short note about this person..."
               class="textarea textarea-bordered w-full"
               rows="3"
@@ -69,7 +70,6 @@
 
 <script setup lang="ts">
 import { useAuthStore } from "~~/stores/auth";
-
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -107,8 +107,9 @@ const handleSubmit = async () => {
     form.name = "";
     form.relation = "";
     form.description = "";
+    router.push("/settings/relatives");
 
-    setTimeout(() => router.push("/settings/relatives"), 1000);
+    // setTimeout(() => router.push("/settings/relatives"), 1000);
   } catch (err: any) {
     errorMessage.value = err?.data?.statusMessage ?? "Something went wrong.";
   } finally {

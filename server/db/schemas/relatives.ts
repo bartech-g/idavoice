@@ -1,4 +1,4 @@
-import { bigint, integer, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgTable, text } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
 export const relatives = pgTable("relatives", {
@@ -8,6 +8,6 @@ export const relatives = pgTable("relatives", {
     relation: text().notNull(),
     desciption: text(),
     userId: text().notNull().references(() => user.id, { onDelete: "cascade" }),
-    createdAt: bigint({ mode: "number" }).notNull().$default(() => Date.now()),
-    updatedAt: bigint({ mode: "number" }).notNull().$default(() => Date.now()).$onUpdate(() => Date.now()),
+    createdAt: integer().notNull().$default(() => Date.now()),
+    updatedAt: integer().notNull().$default(() => Date.now()).$onUpdate(() => Date.now()),
 });
