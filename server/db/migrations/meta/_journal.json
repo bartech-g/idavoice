@@ -50,6 +50,20 @@
       "when": 1775590347634,
       "tag": "0006_gray_doctor_doom",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1775655123732,
+      "tag": "0007_sparkling_whistler",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1775655345533,
+      "tag": "0008_outgoing_cyclops",
+      "breakpoints": true
     }
   ]
 }

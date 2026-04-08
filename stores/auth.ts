@@ -1,73 +1,47 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
-import { navigateTo } from '#app'
-// import { createAuthClient } from "better-auth/vue"
-
-// export const authClient = createAuthClient({
-//     sessionOptions: {
-//         refetchInterval: 0,
-//         refetchOnWindowFocus: false,
-//     }
-// })
 import { authClient } from '~~/utils/auth-client'
 
-export const useAuthStore = defineStore('useAuthStore', () => {
-    const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(null);
-    async function init() {
-        const data = await authClient.useSession(useFetch);
-        session.value = data
+export const useAuthStore = defineStore('auth', () => {
+    const user = ref<typeof authClient.$Infer.Session.user | null>(null)
+    const errorMessage = ref('')
+
+    function setUser(data: { user: typeof authClient.$Infer.Session.user } | null) {
+        user.value = data?.user ?? null
     }
-    const loading = computed(() => session.value?.isPending)
-    const user = computed(() => session.value?.data?.user)
-    const errorMessage = ref("")
 
     async function signUp(firstName: string, lastName: string, email: string, password: string) {
-        const { error } = await authClient.signUp.email({
+        errorMessage.value = ''
+        const { error, data } = await authClient.signUp.email({
             name: `${firstName} ${lastName}`,
-            email: email,
-            password: password,
-            image: "",
+            email,
+            password,
+            image: '',
         })
-
-        if (error) {
-            errorMessage.value = error.message!
-            return
-        }
-
+        if (error) { errorMessage.value = error.message!; return }
+        setUser(data)
         await navigateTo('/')
     }
 
     async function signIn(email: string, password: string) {
-        const { error } = await authClient.signIn.email({
-            email: email,
-            password: password,
-        })
-
-        if (error) {
-            errorMessage.value = error.message!
-            return
-        }
-
+        errorMessage.value = ''
+        const { error, data } = await authClient.signIn.email({ email, password })
+        if (error) { errorMessage.value = error.message!; return }
+        setUser(data)
         await navigateTo('/')
     }
 
     async function signOut() {
-        await authClient.signOut({
-            fetchOptions: {
-                onSuccess: () => {
-                    navigateTo('/')
-                },
-            },
-        })
+        await authClient.signOut()
+        setUser(null)
+        await navigateTo('/')
     }
 
-    return {
-        init,
-        loading,
-        user,
-        errorMessage,
-        signUp,
-        signIn,
-        signOut,
+    // Used by the SSR plugin — getSession DOES return { user, session }
+    function setSession(data: { user: typeof authClient.$Infer.Session.user; session: typeof authClient.$Infer.Session.session } | null) {
+        user.value = data?.user ?? null
     }
+
+    const isLoggedIn = computed(() => user.value !== null)
+
+    return { user, errorMessage, isLoggedIn, setUser, setSession, signUp, signIn, signOut }
 })
