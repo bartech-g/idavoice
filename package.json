@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@formkit/nuxt": "^2.0.0",
     "@neondatabase/serverless": "^1.0.2",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/icon": "^2.2.1",

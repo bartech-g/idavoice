@@ -10,8 +10,12 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/icon',
     '@nuxtjs/color-mode',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@formkit/nuxt'
   ],
+  formkit: {
+    autoImport: true
+  },
   vite: {
     plugins: [tailwindcss() as any],
     optimizeDeps: {
@@ -24,5 +28,6 @@ export default defineNuxtConfig({
   },
   colorMode: {
     dataValue: "theme"
-  }
+  },
+
 })

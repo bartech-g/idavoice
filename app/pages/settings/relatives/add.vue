@@ -1,68 +1,77 @@
 <template>
   <div class="flex items-center justify-center">
-    <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card w-full max-w-md bg-base-100 shadow-2xl">
       <div class="card-body">
-        <h2 class="card-title text-2xl font-bold">Add Relative</h2>
-        <form class="grid gap-4" @submit.prevent="handleSubmit">
-          <div class="form-control">
-            <label class="label" for="name">
-              <span class="label-text">Name</span>
-            </label>
-            <input
-              id="name"
-              v-model="form.name"
-              type="text"
-              placeholder="e.g. John Doe"
-              required
-              class="input input-bordered w-full"
-            />
-          </div>
+        <h2 class="card-title text-3xl font-bold">Hozzátartozó hozzáadása</h2>
 
-          <div class="form-control">
-            <label class="label" for="relation">
-              <span class="label-text">Relation</span>
-            </label>
-            <input
-              id="relation"
-              v-model="form.relation"
-              type="text"
-              placeholder="e.g. Father, Sister, Cousin"
-              required
-              class="input input-bordered w-full"
-            />
-          </div>
+        <FormKit
+          type="form"
+          :actions="false"
+          form-class="space-y-5 text-xl"
+          @submit="handleSubmit"
+        >
+          <FormKit
+            type="text"
+            name="name"
+            label="Név"
+            placeholder="pl. Kovács János"
+            validation="required|length:2,100"
+            :validation-messages="{
+              required: 'A név megadása kötelező',
+              length: 'A névnek 2-100 karakter hosszúnak kell lennie',
+            }"
+            input-class="input input-bordered w-full"
+            label-class="label"
+            wrapper-class="form-control"
+            message-class="text-error text-sm mt-1"
+          />
 
-          <div class="form-control">
-            <label class="label" for="description">
-              <span class="label-text">Description</span>
-              <span class="label-text-alt text-base-content/50">Optional</span>
-            </label>
-            <input
-              id="description"
-              v-model="form.description"
-              type="textarea"
-              placeholder="A short note about this person..."
-              class="textarea textarea-bordered w-full"
-              rows="3"
-            />
-          </div>
+          <FormKit
+            type="text"
+            name="relation"
+            label="Rokonság"
+            placeholder="pl. Apa, Testvér, Unokatestvér"
+            validation="required|length:2,50"
+            :validation-messages="{
+              required: 'A rokonyság megadása kötelező',
+              length: 'A rokonyságnak 2-50 karakter hosszúnak kell lennie',
+            }"
+            input-class="input input-bordered w-full"
+            label-class="label"
+            wrapper-class="form-control"
+            message-class="text-error text-sm mt-1"
+          />
 
-          <button
-            type="submit"
-            class="btn btn-primary w-full"
-            :disabled="loading"
-          >
-            {{ loading ? "Saving..." : "Add Relative" }}
-          </button>
+          <FormKit
+            type="textarea"
+            name="description"
+            label="Leírás"
+            placeholder="Rövid megjegyzés erről a személyről..."
+            validation="length:0,500"
+            :validation-messages="{
+              length: 'A leírás maximum 500 karakter lehet',
+            }"
+            input-class="textarea textarea-bordered w-full"
+            label-class="label"
+            wrapper-class="form-control"
+            message-class="text-error text-sm mt-1"
+          />
 
-          <div v-if="errorMessage" class="alert alert-error">
+          <div v-if="errorMessage" class="alert alert-error mt-4">
             <span>{{ errorMessage }}</span>
           </div>
 
-          <div v-if="successMessage" class="alert alert-success">
+          <div v-if="successMessage" class="alert alert-success mt-4">
             <span>{{ successMessage }}</span>
           </div>
-        </form>
+
+          <FormKit
+            type="submit"
+            :label="loading ? 'Mentés...' : 'Mentés'"
+            :disabled="loading"
+            input-class="btn uppercase btn-neutral w-full"
+          />
+        </FormKit>
       </div>
     </div>
   </div>
@@ -73,19 +82,18 @@ import { useAuthStore } from "~~/stores/auth";
 const authStore = useAuthStore();
 const router = useRouter();
 
-const form = reactive({
-  name: "",
-  relation: "",
-  description: "",
-});
-
 const loading = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
 
-const handleSubmit = async () => {
+const handleSubmit = async (formData: {
+  name: string;
+  relation: string;
+  description: string;
+}) => {
   if (!authStore.user?.id) {
-    errorMessage.value = "You must be logged in to add a relative.";
+    errorMessage.value =
+      "A hozzáadáshoz bejelentkezett felhasználónak kell lenned.";
     return;
   }
 
@@ -97,21 +105,16 @@ const handleSubmit = async () => {
     await $fetch("/api/relatives", {
       method: "POST",
       body: {
-        name: form.name,
-        relation: form.relation,
-        description: form.description,
+        name: formData.name,
+        relation: formData.relation,
+        description: formData.description,
       },
     });
 
-    successMessage.value = "Relative added successfully!";
-    form.name = "";
-    form.relation = "";
-    form.description = "";
+    successMessage.value = "A hozzátartozó sikeresen hozzáadva!";
     router.push("/settings/relatives");
-
-    // setTimeout(() => router.push("/settings/relatives"), 1000);
   } catch (err: any) {
-    errorMessage.value = err?.data?.statusMessage ?? "Something went wrong.";
+    errorMessage.value = err?.data?.statusMessage ?? "Valami hiba történt.";
   } finally {
     loading.value = false;
   }
