@@ -38,12 +38,16 @@
       <button type="button" class="w-full" @click="handleSignUp">
         Create an account
       </button>
+      <div v-if="authStore.errorMessage" class="mt-5">
+        <p>Error:</p>
+        <p>{{ authStore.errorMessage }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "~~/stores/auth";
 
 const authStore = useAuthStore();
 const firstName = ref("");

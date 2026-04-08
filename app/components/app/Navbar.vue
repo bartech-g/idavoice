@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "~~/stores/auth";
 const authStore = useAuthStore();
-const isLoggedIn = computed(() => authStore.user !== undefined);
+const isLoggedIn = computed(() => authStore.user !== null);
 </script>
