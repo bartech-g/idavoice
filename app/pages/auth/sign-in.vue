@@ -25,6 +25,7 @@
               id="password"
               v-model="password"
               type="password"
+              placeholder="********"
               required
               class="input input-bordered w-full"
             />

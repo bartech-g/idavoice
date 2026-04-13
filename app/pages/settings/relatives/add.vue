@@ -81,6 +81,7 @@
 import { useAuthStore } from "~~/stores/auth";
 const authStore = useAuthStore();
 const router = useRouter();
+const { $csrfFetch } = useNuxtApp();
 
 const loading = ref(false);
 const errorMessage = ref("");
@@ -102,7 +103,7 @@ const handleSubmit = async (formData: {
   successMessage.value = "";
 
   try {
-    await $fetch("/api/relatives", {
+    await $csrfFetch("/api/relatives", {
       method: "POST",
       body: {
         name: formData.name,

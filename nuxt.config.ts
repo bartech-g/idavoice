@@ -11,7 +11,8 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
-    '@formkit/nuxt'
+    '@formkit/nuxt',
+    'nuxt-csurf',
   ],
   formkit: {
     autoImport: true

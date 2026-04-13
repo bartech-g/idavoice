@@ -4,7 +4,7 @@ import { authClient } from '~~/utils/auth-client'
 export const useAuthStore = defineStore('auth', () => {
     const user = ref<typeof authClient.$Infer.Session.user | null>(null)
     const errorMessage = ref('')
-
+    const loading = ref(false)
     function setUser(data: { user: typeof authClient.$Infer.Session.user } | null) {
         user.value = data?.user ?? null
     }
@@ -23,15 +23,23 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function signIn(email: string, password: string) {
+        loading.value = true
+        const { csrf } = useCsrf()
+        const headers = new Headers()
+        headers.append("csrf-token", csrf)
         errorMessage.value = ''
-        const { error, data } = await authClient.signIn.email({ email, password })
+        const { error, data } = await authClient.signIn.email({ email, password, fetchOptions: { headers } },)
         if (error) { errorMessage.value = error.message!; return }
         setUser(data)
+        loading.value = false
         await navigateTo('/')
     }
 
     async function signOut() {
-        await authClient.signOut()
+        const { csrf } = useCsrf()
+        const headers = new Headers()
+        headers.append("csrf-token", csrf)
+        await authClient.signOut({ fetchOptions: { headers } })
         setUser(null)
         await navigateTo('/')
     }
@@ -43,5 +51,5 @@ export const useAuthStore = defineStore('auth', () => {
 
     const isLoggedIn = computed(() => user.value !== null)
 
-    return { user, errorMessage, isLoggedIn, setUser, setSession, signUp, signIn, signOut }
+    return { user, errorMessage, loading, isLoggedIn, setUser, setSession, signUp, signIn, signOut }
 })
